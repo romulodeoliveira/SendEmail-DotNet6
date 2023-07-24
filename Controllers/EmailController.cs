@@ -11,7 +11,15 @@ namespace SendEmail.Controllers;
 [ApiController]
 public class EmailController : ControllerBase
 {
-    [HttpPost]
+    private readonly IEmailService _emailService;
+
+    public EmailController(IEmailService emailService)
+    {
+        _emailService = emailService;
+    }
+    
+    // EXEMPLO 01
+    [HttpPost("sendemail1")]
     public IActionResult SendEmail1(string body)
     {
         var email = new MimeMessage();
@@ -26,6 +34,14 @@ public class EmailController : ControllerBase
         smtp.Send(email);
         smtp.Disconnect(true);
 
+        return Ok("Email enviado!");
+    }
+    
+    // EXEMPLO 02
+    [HttpPost("sendemail2")]
+    public IActionResult SendEmail2(EmailDto request)
+    {
+        _emailService.SendEmail(request);
         return Ok("Email enviado!");
     }
 }
